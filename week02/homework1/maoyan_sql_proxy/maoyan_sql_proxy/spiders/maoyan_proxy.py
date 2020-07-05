@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import scrapy
-from maoyan_spider.items import MaoyanSpiderItem
+from maoyan_sql_proxy.items import MaoyanSqlProxyItem
 from scrapy.selector import Selector
 
-class MaoyanSpider(scrapy.Spider):
-    name = 'maoyan'
+class MaoyanProxySpider(scrapy.Spider):
+    name = 'maoyan_proxy'
     allowed_domains = ['maoyan.com']
     start_urls = ['https://maoyan.com/films?showType=3']
 
@@ -16,16 +16,20 @@ class MaoyanSpider(scrapy.Spider):
 
     # 解析函数
     def parse2(self, response):
-        # 打印网页的url
-        print(response.url)
-
+        print("DEBUG: INTERNAL MASSAGE START HERE")
         movie = Selector(response=response).xpath('//div[@class="movie-brief-container"]')
         for tag in movie:
-            item = MaoyanSpiderItem()
+            item = MaoyanSqlProxyItem()
+            types = {}
             title = tag.xpath('./h1/text()').extract()
+            test = tag.xpath('./ul/li[0]')
+            for type in tag.xpath('./ul/li[0]/a/text()'):
+                print(type.extract())
+                types.append(type)
             date = tag.xpath('./ul/li[2]/text()').extract()
-            print(title, date)
             item['title'] = title
+            item['types'] = types
             item['date'] = date
+
             yield item
 
