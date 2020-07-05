@@ -16,20 +16,20 @@ class MaoyanProxySpider(scrapy.Spider):
 
     # 解析函数
     def parse2(self, response):
-        print("DEBUG: INTERNAL MASSAGE START HERE")
+        print("##########DEBUG: INTERNAL MASSAGE START HERE############")
+
         movie = Selector(response=response).xpath('//div[@class="movie-brief-container"]')
         for tag in movie:
             item = MaoyanSqlProxyItem()
-            types = {}
+            types = []
             title = tag.xpath('./h1/text()').extract()
-            test = tag.xpath('./ul/li[0]')
-            for type in tag.xpath('./ul/li[0]/a/text()'):
-                print(type.extract())
-                types.append(type)
+            for type in tag.xpath('.//ul/li/a[@class="text-link"]/text()'):
+                types.append(type.extract())
             date = tag.xpath('./ul/li[2]/text()').extract()
             item['title'] = title
             item['types'] = types
             item['date'] = date
 
+        print("##########DEBUG: INTERNAL MASSAGE END HERE############")
             yield item
 
