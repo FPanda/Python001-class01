@@ -13,7 +13,7 @@ class MultiProcessWorker:
     def pingIp(self, ip_list):
         for i in ip_list:
             print("启动ip地址处理进程：%s" % i)
-            self.processPool.apply_async(self.work_handler, args=([i, self.work_queue],))
+            self.processPool.apply_async(self.work_handler, (i, self.work_queue,))
 
     def close(self):
         self.processPool.close()
