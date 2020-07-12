@@ -12,5 +12,4 @@ def convertIpRangeToIpList(ip_start, ip_end):
     for i in range (int_start_ip, int_end_ip+1):
         ip_list.append(IP(i).strNormal(0))
 
-    print(ip_list)
     return ip_list
